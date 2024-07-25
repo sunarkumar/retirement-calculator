@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites tests="1" failures="0" errors="0" skipped="0">
-  <testsuite name="Pre retirement calculator" timestamp="2024-07-22T23:03:46" time="87.337" tests="1" failures="0" errors="0" skipped="0">
+  <testsuite name="Pre retirement calculator" timestamp="2024-07-25T08:45:47" time="10.092" tests="1" failures="0" errors="0" skipped="0">
     <properties>
       <property name="specId" value="0"/>
       <property name="featureName" value="Pre-retirement calculator"/>
-      <property name="capabilities" value="chrome.126_0_6478_182.windows"/>
+      <property name="capabilities" value="chrome.126_0_6478_183.windows"/>
       <property name="featureFile" value="file:///C:/Users/B%20Harika/Documents/WebdriverIo/features/RetirementCalculator.feature"/>
     </properties>
-    <testcase classname="CucumberJUnitReport-chrome.126_0_6478_182.windows.Pre retirement calculator" name="User should be able to submit form with all required fields filled in" time="87.317">
+    <testcase classname="CucumberJUnitReport-chrome.126_0_6478_183.windows.Pre retirement calculator" name="Additional Social Security fields should display hide based on Social Security benefits selection" time="10.076">
       <system-out><![CDATA[
-✅ Given User fills out the mandatory feilds of pre retirement calculator form✅ When User submits the form✅ Then Validate the results are produced by the calculator after submission
+✅ Given User selects the option 'yes' for social security fields✅ Then User validates social security options are 'Displayed'✅ When User selects the option 'no' for social security fields✅ Then User validates social security options are 'not Displayed'
 ]]></system-out>
     </testcase>
   </testsuite>

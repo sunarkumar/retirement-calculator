@@ -1,5 +1,6 @@
 import type { Options } from '@wdio/types'
-
+import {ReportGenerator, HtmlReporter} from 'wdio-html-nice-reporter';
+let reportAggregator: ReportGenerator;
 
 export const config: Options.Testrunner = {
     //
@@ -16,6 +17,7 @@ export const config: Options.Testrunner = {
         }
     },
     
+    baseUrl: 'https://www.securian.com/insights-tools/retirement-calculator.html',
     //
     // ==================
     // Specify Test Files
@@ -135,26 +137,33 @@ export const config: Options.Testrunner = {
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter
     reporters: ['spec', 
-        
-        ['junit', {
-            outputDir: './',
-            outputFileFormat: function(options) { // optional
-                return `results-${options.cid}.${options.capabilities}.xml`
-            }
-        }],
 
-        ['allure', {
-            outputDir: 'allure-results',
-            disableWebdriverStepsReporting: false,
-            disableWebdriverScreenshotsReporting: false,
-        }],
+        ["html-nice", {
+            outputDir: './reports/html-reports/',
+            filename: 'report.html',
+            reportTitle: 'Test Report Title',
+            linkScreenshots: true,
+            //to show the report in a browser when done
+            showInBrowser: true,
+            collapseTests: false,
+            //to turn on screenshots after every test
+            useOnAfterCommandForScreenshot: false
+        }
+        ],
+
+        [
+            'json',{
+                outputDir: './results'
+            }
+        ],
 
         ],
 
     // If you are using Cucumber you need to specify the location of your step definitions.
     cucumberOpts: {
         // <string[]> (file/dir) require files before executing features
-        require: ['./src/step-definitions/steps.ts'],
+        require: ['./src/step-definitions/steps.ts'  ,'C:/Users/B Harika/Documents/WebdriverIo/Utilities/hooks.ts'],
+
         // <boolean> show full backtrace for errors
         backtrace: false,
         // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
@@ -172,7 +181,7 @@ export const config: Options.Testrunner = {
         // <boolean> fail if there are any undefined or pending steps
         strict: false,
         // <string> (expression) only execute the features or scenarios with tags matching the expression
-        tagExpression: '@MandatoryFeilds_retirementForm',
+        tagExpression: '',
         // <number> timeout for step definitions
         timeout: 90000,
         // <boolean> Enable this config to treat undefined definitions as warnings.
@@ -357,12 +366,7 @@ export const config: Options.Testrunner = {
     */
     // afterAssertion: function(params) {
     // }
-}
-function removeSync(arg0: string) {
-    throw new Error('Function not implemented.')
-}
 
-function generate(arg0: { jsonDir: string; reportPath: string; }) {
-    throw new Error('Function not implemented.');
-}
+};
+
 
