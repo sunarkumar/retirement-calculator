@@ -18,7 +18,7 @@ class RetairementCalculatorPage extends WebPage {
         return $(`//input[@id='retirement-age']`);
     }
 
-    get currentIncome() {
+    get currentAnnualIncome() {
         return $(`//input[@id='current-income']`);
     }
 
@@ -34,7 +34,7 @@ class RetairementCalculatorPage extends WebPage {
         return $(`//input[@id='current-annual-savings']`);
     }
 
-    get eachYearRateOfSavingsPercentage() {
+    get rateOfIncreaseInSavingsPercentage() {
         return $(`//input[@id='savings-increase-rate']`);
     }
 
@@ -102,7 +102,7 @@ class RetairementCalculatorPage extends WebPage {
     }
 
 
-    //-------------------------//
+    //----------End Region---------------//
 
     //****Adjust default sections******
 
@@ -135,11 +135,11 @@ class RetairementCalculatorPage extends WebPage {
         return $(`//input[@id='retirement-annual-income']`);
     }
 
-    get preRetirementRoi() {
+    get preRetirementROI() {
         return $(`//input[@id='pre-retirement-roi']`);
     }
 
-    get postRetirementRoi() {
+    get postRetirementROI() {
         return $(`//input[@id='post-retirement-roi']`);
     }
 
@@ -157,113 +157,113 @@ class RetairementCalculatorPage extends WebPage {
 
     async preRetirementForm(feildType: string) {
         try {
-        const data = testData[feildType];
+            const data = testData[feildType];
 
-        if (feildType === 'mandatory_Fields' || feildType === 'all_Fields') {
+            if (feildType === 'mandatory_Fields' || feildType === 'all_Fields') {
 
-            await super.click(await this.calculateButton);
-            await super.waitForPresence(await this.mandatoryFeildsAlert);
+                await super.click(await this.calculateButton);
+                await super.waitForPresence(await this.mandatoryFeildsAlert);
 
-            const mandatoryFields = await this.mandatoryFeildsList;
+                const mandatoryFields = await this.mandatoryFeildsList;
 
-            for (let index = 0; index < mandatoryFields.length; index++) {
-                let elementName = await mandatoryFields[index].getText();
+                for (let index = 0; index < mandatoryFields.length; index++) {
+                    let elementName = await mandatoryFields[index].getText();
 
-                console.log(elementName, 'these are the element names');
+                    console.log(elementName, 'these are the element names');
 
-                switch (elementName) {
-                    case 'What is your current age?':
-                        await super.slowTypeFlex(await this.currentAge, data.currentAge.toString());
-                        break;
-                    case 'At what age do you plan to retire?':
-                        await super.slowTypeFlex(await this.retirementAge, data.retirementAge.toString());
-                        break;
-                    case 'What is your current annual income?':
-                        await super.click(await this.currentIncome);
-                        await browser.keys(['Escape']);
-                        await super.slowTypeFlex(await this.currentIncome, data.currentIncome.toString());
-                        break;
-                    case 'What is your current retirement savings balance?':
-                        await super.click(await this.currentRetirementSavingsBalance);
-                        await browser.keys(['Escape']);
-                        await super.slowTypeFlex(await this.currentRetirementSavingsBalance, data.currentRetirementSavingsBalance.toString());
-                        break;
-                    case 'How much are you currently saving each year for retirement?':
-                        await super.slowTypeFlex(await this.eachYearSavingsPercentage, data.eachYearSavingsPercentage.toString());
-                        break;
-                    case 'What is the rate of increase in your savings each year?':
-                        await super.slowTypeFlex(await this.eachYearRateOfSavingsPercentage, data.eachYearRateOfSavingsPercentage.toString());
-                        break;
+                    switch (elementName) {
+                        case 'What is your current age?':
+                            await super.slowTypeFlex(await this.currentAge, data.currentAge.toString());
+                            break;
+                        case 'At what age do you plan to retire?':
+                            await super.slowTypeFlex(await this.retirementAge, data.retirementAge.toString());
+                            break;
+                        case 'What is your current annual income?':
+                            await super.click(await this.currentAnnualIncome);
+                            await browser.keys(['Escape']);
+                            await super.slowTypeFlex(await this.currentAnnualIncome, data.currentIncome.toString());
+                            break;
+                        case 'What is your current retirement savings balance?':
+                            await super.click(await this.currentRetirementSavingsBalance);
+                            await browser.keys(['Escape']);
+                            await super.slowTypeFlex(await this.currentRetirementSavingsBalance, data.currentRetirementSavingsBalance.toString());
+                            break;
+                        case 'How much are you currently saving each year for retirement?':
+                            await super.slowTypeFlex(await this.eachYearSavingsPercentage, data.eachYearSavingsPercentage.toString());
+                            break;
+                        case 'What is the rate of increase in your savings each year?':
+                            await super.slowTypeFlex(await this.rateOfIncreaseInSavingsPercentage, data.eachYearRateOfSavingsPercentage.toString());
+                            break;
 
+                    }
+                }
+                if (feildType === 'all_Fields') {
+                    await super.click(await this.spouseIncome);
+                    await super.slowTypeFlex(await this.spouseIncome, data.spouseIncome.toString());
+
+                    this.socicalSecurityStatuses = data.socialSecurityStatuses;
+                    await super.click(await this.socicalSecurity);
+
+                    this.maritalStatus_Value = data.maritalStatus_Value;
+                    await super.click(await this.maritalStatus);
+
+                    await super.click(await this.inputOverRideAmount_socialSecurity);
+                    await super.slowTypeFlex(await this.inputOverRideAmount_socialSecurity, data.inputOverRideAmount_socialSecurity.toString());
                 }
             }
+            else if (feildType === 'default_Values') {
+
+                await super.waitForPresence(await this.additionalIncome);
+                await super.click(await this.additionalIncome);
+                await super.type(await this.additionalIncome, data.additionalIncome.toString());
+
+                await super.waitForPresence(await this.retirementDuration);
+                await super.type(await this.retirementDuration, data.retirementDuration.toString());
+
+                await super.waitForPresence(await this.includeInflation);
+                await super.click(await this.includeInflation);
+
+                await super.clickElementUsingJS(await this.expectedInflationRate);
+                await super.type(await this.expectedInflationRate, data.expectedInflationRate.toString());
+
+                await super.waitForPresence(await this.RetirementAnnualIncome);
+                await super.type(await this.RetirementAnnualIncome, data.RetirementAnnualIncome.toString());
+
+                await super.waitForPresence(await this.preRetirementROI);
+                await super.type(await this.preRetirementROI, data.preRetirementRoi.toString());
+
+                await super.waitForPresence(await this.postRetirementROI);
+                await super.type(await this.postRetirementROI, data.postRetirementRoi.toString());
+
+                await super.waitForPresence(await this.defaulValuesSaveButton);
+                await super.click(await this.defaulValuesSaveButton);
+
+            }
+        } catch (error: any) {
+            console.error(`Error in preRetirementForm(${feildType}): ${error.message}`);
+            throw error; // Re-throw the error to propagate it further if needed
         }
-        if (feildType === 'all_Fields') {
-            await super.click(await this.spouseIncome);
-            await super.slowTypeFlex(await this.spouseIncome, data.spouseIncome.toString());
-
-            this.socicalSecurityStatuses = data.socialSecurityStatuses;
-            await super.click(await this.socicalSecurity);
-
-            this.maritalStatus_Value = data.maritalStatus_Value;
-            await super.click(await this.maritalStatus);
-
-            await super.click(await this.inputOverRideAmount_socialSecurity);
-            await super.slowTypeFlex(await this.inputOverRideAmount_socialSecurity, data.inputOverRideAmount_socialSecurity.toString());
-        }
-        else if (feildType === 'default_Values') {
-
-            await super.waitForPresence(await this.additionalIncome);
-            await super.click(await this.additionalIncome);
-            await super.type(await this.additionalIncome, data.additionalIncome.toString());
-
-            await super.waitForPresence(await this.retirementDuration);
-            await super.type(await this.retirementDuration, data.retirementDuration.toString());
-
-            await super.waitForPresence(await this.includeInflation);
-            await super.click(await this.includeInflation);
-
-            await super.clickElementUsingJS(await this.expectedInflationRate);
-            await super.type(await this.expectedInflationRate, data.expectedInflationRate.toString());
-
-            await super.waitForPresence(await this.RetirementAnnualIncome);
-            await super.type(await this.RetirementAnnualIncome, data.RetirementAnnualIncome.toString());
-
-            await super.waitForPresence(await this.preRetirementRoi);
-            await super.type(await this.preRetirementRoi, data.preRetirementRoi.toString());
-
-            await super.waitForPresence(await this.postRetirementRoi);
-            await super.type(await this.postRetirementRoi, data.postRetirementRoi.toString());
-
-            await super.waitForPresence(await this.defaulValuesSaveButton);
-            await super.click(await this.defaulValuesSaveButton);
-
-        }
-    } catch (error: any) {
-        console.error(`Error in preRetirementForm(${feildType}): ${error.message}`);
-        throw error; // Re-throw the error to propagate it further if needed
-    }
     }
 
     async submitForm() {
-    try {
-        let isFormSubmitted = false;
-        await super.click(await this.calculateButton);
-        await super.sleep(MilliSeconds.XS);
-        const isResultsDisplayed = await super.isDisplayed(await this.results);
+        try {
+            let isFormSubmitted = false;
+            await super.click(await this.calculateButton);
+            await super.sleep(MilliSeconds.XS);
+            const isResultsDisplayed = await super.isDisplayed(await this.results);
 
-        console.log(isResultsDisplayed, 'this is the result displayed status')
+            console.log(isResultsDisplayed, 'this is the result displayed status')
 
-        if (isResultsDisplayed === true) {
-            isFormSubmitted = true;
+            if (isResultsDisplayed === true) {
+                isFormSubmitted = true;
+            }
+
+            return isFormSubmitted;
+        } catch (error: any) {
+            console.error(`Error in submitForm(): ${error.message}`);
+            throw error;
         }
-
-        return isFormSubmitted;
-    } catch (error: any) {
-    console.error(`Error in submitForm(): ${error.message}`);
-    throw error;
     }
-}
 }
 
 export default new RetairementCalculatorPage();
