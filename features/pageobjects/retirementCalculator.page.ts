@@ -8,7 +8,9 @@ const testData = require('../../Utilities/testdata');
 * main page object containing all methods, selectors and functionality
 * that is shared across all page objects
 */
-class RetairementCalculatorPage extends WebPage {
+class RetirementCalculatorPage extends WebPage {
+
+    private errorText!: string;
 
     get currentAge() {
         return $(`//input[@id='current-age']`);
@@ -42,11 +44,11 @@ class RetairementCalculatorPage extends WebPage {
         return $(`//h2[normalize-space()='Pre-retirement calculator']/..//following-sibling::section//button[text()='Calculate']`);
     }
 
-    get mandatoryFeildsAlert() {
+    get mandatoryFieldsAlert() {
         return $(`//p[@id='calculator-input-alert-desc'][text()='Please fill out all required fields']`);
     }
 
-    get mandatoryFeildsList() {
+    get mandatoryFieldsList() {
         return $$(`//span[text()='Input required']/../..//label`);
     }
 
@@ -61,6 +63,15 @@ class RetairementCalculatorPage extends WebPage {
     get resultsChart() {
         return $(`//canvas[@id='results-chart']`);
     }
+
+    set invalidError(errorText:string) {
+       this.errorText = `//span[@id='${errorText}']`;
+    }
+
+    get invalidRetirementAge() {
+        return $(this.errorText );
+    }
+
 
 
     //****Social security income section Locators******
@@ -77,7 +88,7 @@ class RetairementCalculatorPage extends WebPage {
         return $(this.socialSecurityStatus);
     }
 
-    get additionalFeildsStatus() {
+    get additionalFieldsStatus() {
         return $(`//div[@class='row social-security-field']`);
     }
 
@@ -150,21 +161,22 @@ class RetairementCalculatorPage extends WebPage {
     //--------------------------------------------------------------------//
 
     /**
-     * @description: This method is used to fill the Pre-Retirement Calculator feilds - Mandatory Feilds , All -Feilds, Default calculator feilds
-     * @param {string} feildType
+     * @description: This method is used to fill the Pre-Retirement Calculator fields - Mandatory Fields , All -Fields, Default calculator Fields
+     * @param {string} fieldType
      * @author:SunarKumar
      **/
 
-    async preRetirementForm(feildType: string) {
+    async preRetirementForm(fieldType: string) {
         try {
-            const data = testData[feildType];
 
-            if (feildType === 'mandatory_Fields' || feildType === 'all_Fields') {
+            const data = testData[fieldType];
+
+            if (!(fieldType === 'default_Values')) {
 
                 await super.click(await this.calculateButton);
-                await super.waitForPresence(await this.mandatoryFeildsAlert);
+                await super.waitForPresence(await this.mandatoryFieldsAlert);
 
-                const mandatoryFields = await this.mandatoryFeildsList;
+                const mandatoryFields = await this.mandatoryFieldsList;
 
                 for (let index = 0; index < mandatoryFields.length; index++) {
                     let elementName = await mandatoryFields[index].getText();
@@ -197,66 +209,75 @@ class RetairementCalculatorPage extends WebPage {
 
                     }
                 }
-                if (feildType === 'all_Fields') {
-                    await super.click(await this.spouseIncome);
-                    await super.slowTypeFlex(await this.spouseIncome, data.spouseIncome.toString());
-
-                    this.socicalSecurityStatuses = data.socialSecurityStatuses;
-                    await super.click(await this.socicalSecurity);
-
-                    this.maritalStatus_Value = data.maritalStatus_Value;
-                    await super.click(await this.maritalStatus);
-
-                    await super.click(await this.inputOverRideAmount_socialSecurity);
-                    await super.slowTypeFlex(await this.inputOverRideAmount_socialSecurity, data.inputOverRideAmount_socialSecurity.toString());
-                }
+                if (!(fieldType === 'mandatory_Fields')) await this.fillAllFields(fieldType);
             }
-            else if (feildType === 'default_Values') {
+            else await this.fillDefualtFields(fieldType);
 
-                await super.waitForPresence(await this.additionalIncome);
-                await super.click(await this.additionalIncome);
-                await super.type(await this.additionalIncome, data.additionalIncome.toString());
-
-                await super.waitForPresence(await this.retirementDuration);
-                await super.type(await this.retirementDuration, data.retirementDuration.toString());
-
-                await super.waitForPresence(await this.includeInflation);
-                await super.click(await this.includeInflation);
-
-                await super.clickElementUsingJS(await this.expectedInflationRate);
-                await super.type(await this.expectedInflationRate, data.expectedInflationRate.toString());
-
-                await super.waitForPresence(await this.RetirementAnnualIncome);
-                await super.type(await this.RetirementAnnualIncome, data.RetirementAnnualIncome.toString());
-
-                await super.waitForPresence(await this.preRetirementROI);
-                await super.type(await this.preRetirementROI, data.preRetirementRoi.toString());
-
-                await super.waitForPresence(await this.postRetirementROI);
-                await super.type(await this.postRetirementROI, data.postRetirementRoi.toString());
-
-                await super.waitForPresence(await this.defaulValuesSaveButton);
-                await super.click(await this.defaulValuesSaveButton);
-
-            }
         } catch (error: any) {
-            console.error(`Error in preRetirementForm(${feildType}): ${error.message}`);
+            console.error(`Error in preRetirementForm(${fieldType}): ${error.message}`);
             throw error; // Re-throw the error to propagate it further if needed
         }
     }
 
-    async submitForm() {
+
+    async fillAllFields(fieldType:string) {
+
+        const data = testData[fieldType];
+
+        await super.click(await this.spouseIncome);
+        await super.slowTypeFlex(await this.spouseIncome, data.spouseIncome.toString());
+
+        this.socicalSecurityStatuses = data.socialSecurityStatuses;
+        await super.click(await this.socicalSecurity);
+
+        this.maritalStatus_Value = data.maritalStatus_Value;
+        await super.click(await this.maritalStatus);
+
+        await super.click(await this.inputOverRideAmount_socialSecurity);
+        await super.slowTypeFlex(await this.inputOverRideAmount_socialSecurity, data.inputOverRideAmount_socialSecurity.toString());
+
+    }
+
+
+    async fillDefualtFields(fieldType:string) {
+
+        const data = testData[fieldType];
+
+        await super.click(await this.additionalIncome);
+        await super.type(await this.additionalIncome, data.additionalIncome.toString());
+
+        await super.type(await this.retirementDuration, data.retirementDuration.toString());
+
+        await super.click(await this.includeInflation);
+
+        await super.clickElementUsingJS(await this.expectedInflationRate);
+        await super.type(await this.expectedInflationRate, data.expectedInflationRate.toString());
+
+        await super.type(await this.RetirementAnnualIncome, data.RetirementAnnualIncome.toString());
+
+        await super.type(await this.preRetirementROI, data.preRetirementRoi.toString());
+
+        await super.type(await this.postRetirementROI, data.postRetirementRoi.toString());
+
+        await super.click(await this.defaulValuesSaveButton);
+
+    }
+
+    async submitForm(dataType:string) {
         try {
-            let isFormSubmitted = false;
+            let isFormSubmitted :boolean;
+            
             await super.click(await this.calculateButton);
-            await super.sleep(MilliSeconds.XS);
+
+            if (dataType==='valid data') await super.waitForPresence(await this.results);
+
             const isResultsDisplayed = await super.isDisplayed(await this.results);
 
             console.log(isResultsDisplayed, 'this is the result displayed status')
 
             if (isResultsDisplayed === true) {
                 isFormSubmitted = true;
-            }
+            }else  isFormSubmitted = false;
 
             return isFormSubmitted;
         } catch (error: any) {
@@ -266,4 +287,4 @@ class RetairementCalculatorPage extends WebPage {
     }
 }
 
-export default new RetairementCalculatorPage();
+export default new RetirementCalculatorPage();

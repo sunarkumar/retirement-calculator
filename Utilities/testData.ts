@@ -31,5 +31,32 @@ module.exports = {
         RetirementAnnualIncome: faker.datatype.number({min: 2 ,max:15}),
         preRetirementRoi: faker.datatype.number({min: 2 ,max:14}),
         postRetirementRoi: faker.datatype.number({min: 2 ,max:14}),
+},
+invalid_currentAgeFields:{
+    currentAge: '0',
+    retirementAge: '10',  
+    currentIncome: faker.datatype.number({ min: 40000, max: 50000 }),
+    currentRetirementSavingsBalance: faker.datatype.number({ min: 10000, max: 40000 }),
+    eachYearSavingsPercentage: faker.datatype.number({ min: 2, max: 12 }),
+    eachYearRateOfSavingsPercentage: faker.datatype.number({ min: 2, max: 12 }),
+    spouseIncome: faker.datatype.number({ min: 10000, max: 20000 }),
+    socialSecurityStatuses: 'yes', // or 'no' based on test requirement
+    maritalStatus_Value: 'married',
+    inputOverRideAmount_socialSecurity: faker.datatype.number({ min: 100, max: 1000 }),
+
+
+},
+invalid_retirement_age:{
+    currentAge: 50,
+    retirementAge: 20,
+    currentIncome: faker.datatype.number({ min: 40000, max: 50000 }),
+    currentRetirementSavingsBalance: faker.datatype.number({ min: 10000, max: 40000 }),
+    eachYearSavingsPercentage: faker.datatype.number({ min: 2, max: 12 }),
+    eachYearRateOfSavingsPercentage: faker.datatype.number({ min: 2, max: 12 }),
+    spouseIncome: faker.datatype.number({ min: 10000, max: 20000 }),
+    socialSecurityStatuses: 'yes', // or 'no' based on test requirement
+    maritalStatus_Value: 'married',
+    inputOverRideAmount_socialSecurity: faker.datatype.number({ min: 100, max: 1000 }),
 }
+
 };

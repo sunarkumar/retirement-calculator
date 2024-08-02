@@ -162,7 +162,7 @@ export const config: Options.Testrunner = {
     // If you are using Cucumber you need to specify the location of your step definitions.
     cucumberOpts: {
         // <string[]> (file/dir) require files before executing features
-        require: ['./src/step-definitions/steps.ts'  ,'C:/Users/B Harika/Documents/WebdriverIo/Utilities/hooks.ts'],
+        require: ['./src/step-definitions/steps.ts'  ,'./Utilities/hooks.ts'],
 
         // <boolean> show full backtrace for errors
         backtrace: false,

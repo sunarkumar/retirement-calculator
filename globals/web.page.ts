@@ -105,9 +105,6 @@ export class WebPage {
     );
   }
 
-  async sleep(timeoutValue = MilliSeconds.XXL) {
-    await browser.pause(timeoutValue);
-  }
 
   async handleAlert(operation: 'ACCEPT' | 'DISMISS' | 'GET_TEXT' | 'SET_TEXT', value?: string) {
     await this.waitForAlert();
@@ -221,7 +218,6 @@ export class WebPage {
     if (textChuncks) {
       // eslint-disable-next-line no-restricted-syntax
       for (const textChunk of textChuncks) {
-        await browser.pause(intermediateDelay);
         await element.addValue(textChunk);
       }
     }
